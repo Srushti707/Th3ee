@@ -1,12 +1,69 @@
-# React + Vite
+# Th3ee Website — React + Flask + MongoDB
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a basic authentication system built with:
 
-Currently, two official plugins are available:
+* **React (frontend):** Handles the user interface, forms, and API requests.
+* **Flask (backend):** Provides signup and login endpoints.
+* **MongoDB (database):** Stores users with encrypted passwords.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+It serves as a lightweight starter template for building full-stack applications with secure user authentication.
 
-## Expanding the ESLint configuration
+## How it Works
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Signup**
+
+   * User submits phone number and password.
+   * The password is hashed using **bcrypt** before being stored in MongoDB.
+   * If the phone number already exists, the request is rejected.
+
+2. **Login**
+
+   * User submits phone number and password.
+   * The backend verifies the phone number and compares the password against the stored bcrypt hash.
+   * Returns success or an error response.
+
+3. **Frontend and Backend Communication**
+
+   * React uses Axios to send requests to `http://localhost:5000/signup` and `/login`.
+   * Flask has **CORS enabled** to allow requests from the React dev server during local development.
+
+## Running Locally
+
+### Prerequisites
+
+* Node.js 18 or higher
+* Python 3.10 or higher
+* MongoDB running locally on `mongodb://localhost:27017`
+
+### Backend Setup
+
+```bash
+pip install -r requirements.txt
+python app.py      # Starts Flask API on http://localhost:5000
+```
+
+### Frontend Setup
+
+```bash
+npm install
+npm run dev        # Starts React app using Vite dev server
+```
+## Data Model
+
+MongoDB `users` collection:
+
+```json
+{
+  "phone": "string",
+  "password": "bcrypt hash"
+}
+```
+## Security Notes
+
+* Passwords are never stored in plaintext.
+* For production environments:
+
+  * Use environment variables for MongoDB URI and Flask configuration.
+  * Restrict CORS to trusted frontend domains.
+  * Enable HTTPS, input validation, and rate limiting.
+  * Consider using JWT tokens for session management.
